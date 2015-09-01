@@ -10,10 +10,10 @@ from utilities import sw_user_management as usrs
 ##  locust -f locustfile.py --no-web -n 10 -r 10
 
 
-if MM.USE_PROXY:
-    print("Loading user sessions ...\n")
-    users_pool = usrs.load_sessions_pickle()
-    print("\nUsers loaded successfully\n")
+# if MM.USE_PROXY:
+#     print("Loading user sessions ...\n")
+#     users_pool = usrs.load_sessions_pickle()
+#     print("\nUsers loaded successfully\n")
 
 
 class LocustTask(TaskSet):
