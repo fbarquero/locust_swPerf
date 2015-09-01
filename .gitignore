@@ -1,0 +1,5 @@
+.idea
+*.pyc
+results
+tmp
+vm
