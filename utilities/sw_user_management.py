@@ -107,3 +107,6 @@ def load_sessions_pickle():
     if not isinstance(sessions, list):
         raise Exception("Users were not loaded successfully...")
     return sessions
+
+
+# save_sessions_pickle(250)

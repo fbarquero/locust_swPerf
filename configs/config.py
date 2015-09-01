@@ -53,14 +53,14 @@ class ProxyConfigs():
 
 
 class MultiMechanizeConfigs():
-    RUN_TIME = 30
+    RUN_TIME = 60
     RESULTS_TS_INTERVAL = 120
     RAMPUP = 600
     PROGRESS_BAR = "on"
     CONSOLE_LOGGING = "off"
     XML_REPORT = "on"
     LOGIN_STYLE = "once"
-    THREADS = 30
+    THREADS = 250
     TRANSACTION_FILE = "hit_sowatest_login_once.py"
     USE_PROXY = True
     CONFIG_FILE_PATH = "{}/config.cfg".format(os.path.join(os.path.dirname(__file__), '..'))

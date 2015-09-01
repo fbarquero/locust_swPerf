@@ -46,3 +46,5 @@ HEADERS = {
 r = s.post("http://127.0.0.1:8000/test_bootcamp/servicio/api.json", headers=HEADERS, data=p)
 print r.content
 print r.status_code
+
+s.dele
