@@ -81,11 +81,13 @@ print("Starting Multi-mechanize execution for swPerf proyect: \n")
 
 cmd = []
 increase_max_open_files = custom_runner.get_os_max_file_config()
-cmd.append("cd ..")
-cmd.append("source swPerf/vm/bin/activate")
+#cmd.append("cd ..")
+cmd.append("source env/bin/activate")
 if len(increase_max_open_files) > 0:
     cmd = cmd + increase_max_open_files
-cmd.append("multimech-run swPerf")
+cmd.append("locust -f {} -c {} -r {} --no-web --print-stats".format(multimech_data["test_name"],
+                                                                    multimech_data["threads"],
+                                                                    multimech_data["rampup"]))
 print(cmd)
 
 # Run all CLI Commands needed to start multi - mechanize after configure the project

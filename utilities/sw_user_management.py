@@ -2,7 +2,8 @@ __author__ = 'mblair'
 
 import pickle
 
-from configs.config import MultiMechanizeConfigs as MM, GlobalConfigs as GC
+from configs.config import MultiMechanizeConfigs as MM
+from configs.config import GlobalConfigs as GC
 from sw_requests.login import Login
 import time
 import multiprocessing as mp
@@ -107,6 +108,3 @@ def load_sessions_pickle():
     if not isinstance(sessions, list):
         raise Exception("Users were not loaded successfully...")
     return sessions
-
-
-save_sessions_pickle(250)
