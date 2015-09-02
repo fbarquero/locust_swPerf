@@ -45,19 +45,25 @@ class LocustTask(TaskSet):
     #             users_pool.append(user_credentials)
     #             proxy_request.session.close()
     #
+    @task(1)
+    def hola_mundo(self):
+        print("hola_mundo")
 
-    @task
+    @task(2)
     def hit_example_com(self):
         try:
-            self.start_time = time()
+            start_time = time()
             session = requests.Session()
+            http_adapter = requests.adapters.HTTPAdapter(max_retries=0)
+            session.mount('http://', http_adapter)
+            session.mount('https://', http_adapter)
             session.get("http://www.example.com", timeout=5)
             # # print("Doing a task that is not a request...")
             # login = Login()
             # r = login.sw_valid_login(GC.USERNAME, GC.PASSWORD, "http://www.sowatest.com")
-            stats_latency['latency'].append(time() - self.start_time)
-            events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - self.start_time, response_length=0)
-
+            stats_latency['latency'].append(time() - start_time)
+            events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, response_length=0)
+            session.close()
             # # Assert Section
             # assert r.status_code == 200
             # assert "Access Denied" in str(html.fromstring(r.text).xpath("//title/text()"))
@@ -69,7 +75,8 @@ class LocustTask(TaskSet):
             * *response_time*: Time in milliseconds until exception was thrown
             * *exception*: Exception instance that was thrown
             """
-            events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - self.start_time, exception=e.message)
+            events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception=e)
+
 
 class ConsoleUser(Locust):
     task_set = LocustTask
