@@ -109,4 +109,4 @@ def load_sessions_pickle():
     return sessions
 
 
-# save_sessions_pickle(250)
+save_sessions_pickle(250)
