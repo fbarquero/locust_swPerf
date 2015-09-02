@@ -54,7 +54,7 @@ class LocustTask(TaskSet):
             http_adapter = HTTPAdapter(max_retries=0)
             session.mount('http://', http_adapter)
             session.mount('https://', http_adapter)
-            session.get("http://www.example.com", timeout=5, timeout=30)
+            session.get("http://www.example.com", timeout=30)
             # # print("Doing a task that is not a request...")
             # login = Login()
             # r = login.sw_valid_login(GC.USERNAME, GC.PASSWORD, "http://www.sowatest.com")
