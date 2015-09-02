@@ -46,7 +46,7 @@ def get_user_credentials(x):
             user = get_user_name(x)
     except Exception, e:
         user = False
-        print(e.message)
+        print("Failure:{}".format(e.message))
     finally:
         if user is not False and MM.LOGIN_STYLE is "once":
             print(user[0])
