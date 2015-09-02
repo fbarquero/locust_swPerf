@@ -2,6 +2,7 @@ from locust import Locust, TaskSet, task, events
 from time import time
 from BeautifulSoup import BeautifulSoup
 import requests
+from requests.adapters import HTTPAdapter
 
 from sw_requests.sowatest import SowatestRequests
 from configs.config import MultiMechanizeConfigs as MM
@@ -45,19 +46,15 @@ class LocustTask(TaskSet):
     #             users_pool.append(user_credentials)
     #             proxy_request.session.close()
     #
-    @task(1)
-    def hola_mundo(self):
-        print("hola_mundo")
-
-    @task(2)
+    @task
     def hit_example_com(self):
         try:
             start_time = time()
             session = requests.Session()
-            http_adapter = requests.adapters.HTTPAdapter(max_retries=0)
+            http_adapter = HTTPAdapter(max_retries=0)
             session.mount('http://', http_adapter)
             session.mount('https://', http_adapter)
-            session.get("http://www.example.com", timeout=5)
+            session.get("http://www.example.com", timeout=5, timeout=30)
             # # print("Doing a task that is not a request...")
             # login = Login()
             # r = login.sw_valid_login(GC.USERNAME, GC.PASSWORD, "http://www.sowatest.com")
