@@ -47,7 +47,7 @@ class LocustTask(TaskSet):
     #
 
     @task
-    def printing_someting(self):
+    def hit_example_com(self):
         try:
             self.start_time = time()
             session = requests.Session()
@@ -73,8 +73,8 @@ class LocustTask(TaskSet):
 
 class ConsoleUser(Locust):
     task_set = LocustTask
-    min_wait = 5*1000
-    max_wait = 15*1000
+    min_wait = 0
+    max_wait = 0
     stop_timeout = MM.RUN_TIME
 
 
