@@ -77,8 +77,8 @@ class LocustTask(TaskSet):
 
 class ConsoleUser(Locust):
     task_set = LocustTask
-    min_wait = 0
-    max_wait = 0
+    min_wait = 50
+    max_wait = 150
     stop_timeout = MM.RUN_TIME
 
 
