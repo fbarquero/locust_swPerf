@@ -100,11 +100,11 @@ def on_request_success(request_type, name, response_time, response_length):
     transaction_p += 1
 
 
-def on_request_failure(request_type, name, response_time, exception_message):
+def on_request_failure(request_type, name, response_time, exception):
     """
     Event handler that get triggered on every failed request
     """
-    stats_latency["failure"].append(dict(request_type=request_type, name=name, response_time=response_time, exception=exception_message))
+    stats_latency["failure"].append(dict(request_type=request_type, name=name, response_time=response_time, exception=exception.message))
     global transaction_f
     transaction_f += 1
 
