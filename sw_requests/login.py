@@ -3,7 +3,7 @@ __author__ = 'alonsobarquero'
 from BeautifulSoup import BeautifulSoup
 import requests
 requests.packages.urllib3.disable_warnings()
-
+from requests.adapters import HTTPAdapter
 from configs.config import GlobalConfigs as GC, CertificateConfigs as CRT, ProxyConfigs as PC
 from sw_request_core import request as sw_r
 
@@ -26,6 +26,9 @@ class Login:
         """
         # Creates session
         self.session = requests.Session()
+        http_adapter = HTTPAdapter(max_retries=0)
+        self.session.mount('http://', http_adapter)
+        self.session.mount('https://', http_adapter)
         # Set Certificate to authenticate in the proxy server and socialware sites
         self.session.cert = (CRT.CERT_CRT_PATH, CRT.CERT_KEY_PATH)
         # Accessing the Social Networking Website
