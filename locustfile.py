@@ -1,5 +1,7 @@
 from locust import Locust, TaskSet, task, events
 from time import time
+from requests import Session
+from requests.adapters import HTTPAdapter
 from BeautifulSoup import BeautifulSoup
 
 from sw_requests.sowatest import SowatestRequests
@@ -17,60 +19,60 @@ if MM.USE_PROXY:
 
 class LocustTask(TaskSet):
 
-    @task
-    def hit_sowatest(self):
-        try:
-            if MM.USE_PROXY:
-                start_time = time()
-                user_credentials = users_pool.pop(0)
-                proxy_request = SowatestRequests()
-                response = proxy_request.sowatest_through_proxy(user_credentials)
-                soup = BeautifulSoup(response.text)
-                # Assert Section
-                assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
-                assert "Access Denied" in str(soup.find("title").text)
-                assert '<div id="blockedBanner">' in response.text
-                events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, response_length=0)
-            else:
-                print("no proxy")
-        except Exception, e:
-            if MM.USE_PROXY:
-                if e.message is 'location':
-                    #raise Exception('Possible authentication error against IDP!')
-                    events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception='Possible authentication error against IDP!')
-            events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception=e)
-        finally:
-            if MM.USE_PROXY:
-                users_pool.append(user_credentials)
-                proxy_request.session.close()
-    #
     # @task
-    # def hit_example_com(self):
+    # def hit_sowatest(self):
     #     try:
-    #         start_time = time()
-    #         session = requests.Session()
-    #         http_adapter = HTTPAdapter(max_retries=0)
-    #         session.mount('http://', http_adapter)
-    #         session.mount('https://', http_adapter)
-    #         session.get("http://www.example.com", timeout=30)
-    #         # # print("Doing a task that is not a request...")
-    #         # login = Login()
-    #         # r = login.sw_valid_login(GC.USERNAME, GC.PASSWORD, "http://www.sowatest.com")
-    #         stats_latency['latency'].append(time() - start_time)
-    #         events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, response_length=0)
-    #         session.close()
-    #         # # Assert Section
-    #         # assert r.status_code == 200
-    #         # assert "Access Denied" in str(html.fromstring(r.text).xpath("//title/text()"))
-    #         # assert '<div id="blockedBanner">' in r.text
+    #         if MM.USE_PROXY:
+    #             start_time = time()
+    #             user_credentials = users_pool.pop(0)
+    #             proxy_request = SowatestRequests()
+    #             response = proxy_request.sowatest_through_proxy(user_credentials)
+    #             soup = BeautifulSoup(response.text)
+    #             # Assert Section
+    #             assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
+    #             assert "Access Denied" in str(soup.find("title").text)
+    #             assert '<div id="blockedBanner">' in response.text
+    #             events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, response_length=0)
+    #         else:
+    #             print("no proxy")
     #     except Exception, e:
-    #         """
-    #         * *request_type*: Request type method used
-    #         * *name*: Path to the URL that was called (or override name if it was used in the call to the client)
-    #         * *response_time*: Time in milliseconds until exception was thrown
-    #         * *exception*: Exception instance that was thrown
-    #         """
+    #         if MM.USE_PROXY:
+    #             if e.message is 'location':
+    #                 #raise Exception('Possible authentication error against IDP!')
+    #                 events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception='Possible authentication error against IDP!')
     #         events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception=e)
+    #     finally:
+    #         if MM.USE_PROXY:
+    #             users_pool.append(user_credentials)
+    #             proxy_request.session.close()
+    # #
+    @task(1)
+    def hit_example_com(self):
+        try:
+            start_time = time()
+            session = Session()
+            http_adapter = HTTPAdapter(max_retries=0)
+            session.mount('http://', http_adapter)
+            session.mount('https://', http_adapter)
+            session.get("http://www.example.com", timeout=30)
+            # # print("Doing a task that is not a request...")
+            # login = Login()
+            # r = login.sw_valid_login(GC.USERNAME, GC.PASSWORD, "http://www.sowatest.com")
+            stats_latency['latency'].append(time() - start_time)
+            events.request_success.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, response_length=0)
+            session.close()
+            # # Assert Section
+            # assert r.status_code == 200
+            # assert "Access Denied" in str(html.fromstring(r.text).xpath("//title/text()"))
+            # assert '<div id="blockedBanner">' in r.text
+        except Exception, e:
+            """
+            * *request_type*: Request type method used
+            * *name*: Path to the URL that was called (or override name if it was used in the call to the client)
+            * *response_time*: Time in milliseconds until exception was thrown
+            * *exception*: Exception instance that was thrown
+            """
+            events.request_failure.fire(request_type="Transaction", name="hit_sowatest", response_time=time() - start_time, exception=e)
 
 
 class ConsoleUser(Locust):

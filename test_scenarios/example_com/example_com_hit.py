@@ -15,4 +15,4 @@ class WebsiteUser(HttpLocust):
     min_wait = 100
     max_wait = 200
     host = "http://www.example.com"
-    stop_timeout = 6
+    stop_timeout = 60
