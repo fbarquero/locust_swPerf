@@ -86,6 +86,7 @@ if locust_config_info["print_stats"]:
     locust_run_cmd += "--print-stats"
 
 print(cmd)
+print locust_run_cmd
 
 # Run all CLI Commands needed to start multi - mechanize after configure the project
 # custom_runner.execute_cli_command(cmd)
