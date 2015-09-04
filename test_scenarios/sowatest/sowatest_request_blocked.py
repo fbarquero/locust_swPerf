@@ -1,5 +1,6 @@
 from locust import HttpLocust, TaskSet, task
 from BeautifulSoup import BeautifulSoup
+from requests.adapters import HTTPAdapter
 
 from configs.config import LocustConfigs as locust_config
 from configs.config import ProxyConfigs as proxy_config
@@ -24,6 +25,9 @@ class UserBehavior(TaskSet):
         try:
             if locust_config.USE_PROXY:
                 user_credentials = users_pool.pop(0)
+                http_adapter = HTTPAdapter(max_retries=0)
+                self.client.mount('http://', http_adapter)
+                self.client.mount('https://', http_adapter)
                 proxy_request = SowatestRequests(self.client)
                 response = proxy_request.sowatest_through_proxy(user_credentials)
                 # soup = BeautifulSoup(response.text)
@@ -72,11 +76,11 @@ class UserBehavior(TaskSet):
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
-    min_wait = 100
-    max_wait = 200
+    min_wait = 0
+    max_wait = 0
     # host = "http://sowatest.com"
-    host = "http://www.example.com"
-    stop_timeout = locust_config.RUN_TIME
+    host = "http://sowatest.com"
+    stop_timeout = 1800
 
 
 
