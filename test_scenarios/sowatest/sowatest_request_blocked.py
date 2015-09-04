@@ -43,7 +43,9 @@ class UserBehavior(TaskSet):
     #             users_pool.append(user_credentials)
     @task
     def test_proxy(self):
-        self.client.get("/", proxies=proxy_config.PROXIES)
+        user_credentials = users_pool.pop(0)
+        self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
+        users_pool.append(user_credentials)
 
 
 class WebsiteUser(HttpLocust):
