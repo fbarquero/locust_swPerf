@@ -71,7 +71,7 @@ print("Starting Multi-mechanize execution for swPerf proyect: \n")
 
 cmd = []
 increase_max_open_files = custom_runner.get_os_max_file_config()
-
+cmd.append("pwd")
 cmd.append("source env/bin/activate")
 if len(increase_max_open_files) > 0:
     cmd = cmd + increase_max_open_files
