@@ -67,7 +67,7 @@ class UserBehavior(TaskSet):
 
     @task
     def test_example_no_proxy(self):
-        self.client("/", timeout=10)
+        self.client.get("/", timeout=10)
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
