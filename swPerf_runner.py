@@ -83,7 +83,7 @@ if locust_config_info["no_web"]:
 if locust_config_info["summary_only"]:
     locust_run_cmd += " --summary-only"
 if locust_config_info["print_stats"]:
-    locust_run_cmd += "--print-stats"
+    locust_run_cmd += " --print-stats"
 cmd.append(locust_run_cmd)
 print(cmd)
 
