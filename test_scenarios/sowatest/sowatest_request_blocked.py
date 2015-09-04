@@ -14,7 +14,7 @@ if locust_config.USE_PROXY:
 
 class UserBehavior(TaskSet):
 
-    @task(1)
+    @task
     def hit_sowatest(self):
         try:
             if locust_config.USE_PROXY:
@@ -32,6 +32,7 @@ class UserBehavior(TaskSet):
             if locust_config.USE_PROXY:
                 if e.message is 'location':
                     raise Exception('Possible authentication error against IDP!')
+                raise
         finally:
             if locust_config.USE_PROXY:
                 users_pool.append(user_credentials)
