@@ -25,11 +25,11 @@ class UserBehavior(TaskSet):
                 user_credentials = users_pool.pop(0)
                 proxy_request = SowatestRequests(self.client)
                 response = proxy_request.sowatest_through_proxy(user_credentials)
-                soup = BeautifulSoup(response.text)
+                # soup = BeautifulSoup(response.text)
                 # Assert Section
-                assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
-                assert "Access Denied" in str(soup.find("title").text)
-                assert '<div id="blockedBanner">' in response.text
+                # assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
+                # assert "Access Denied" in str(soup.find("title").text)
+                # assert '<div id="blockedBanner">' in response.text
             else:
                 print("no proxy")
         except Exception, e:
