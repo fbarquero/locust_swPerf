@@ -22,3 +22,9 @@ class SowatestRequests:
         response = self.client.get("/", timeout=GC.GLOBAL_REQUEST_TIMEOUT,
                                     verify=GC.VERIFY_CERTIFICATE)
         return response
+
+    def example_through_proxy(self):
+        proxy_request = ProxyRequests(self.client)
+        r = proxy_request.get_with_proxy("/")
+        return r
+

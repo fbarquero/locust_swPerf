@@ -49,14 +49,20 @@ class UserBehavior(TaskSet):
     #     users_pool.append(user_credentials)
     #     print response.content
     #
-    @task
-    def test_example(self):
-        user_credentials = users_pool.pop(0)
-        self.client.cookies = user_credentials[1]
-        response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
-        users_pool.append(user_credentials)
-        print response.content
+    # @task
+    # def test_example(self):
+    #     user_credentials = users_pool.pop(0)
+    #     self.client.cookies = user_credentials[1]
+    #     response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
+    #     users_pool.append(user_credentials)
+    #     print response.content
 
+    @task
+    def test_example_through_proxy(self):
+        user_credentials = users_pool.pop(0)
+        proxy_request = SowatestRequests(self.client)
+        proxy_request.example_through_proxy()
+        users_pool.append(user_credentials)
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
