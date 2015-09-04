@@ -3,13 +3,12 @@ from locust import HttpLocust, TaskSet, task
 
 class UserBehavior(TaskSet):
     def on_start(self):
-            pass
+        pass
 
     @task(1)
     def index(self):
-        response = self.client.get("/", timeout=10)
-        print response.content
-98
+        self.client.get("/", timeout=10)
+
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior

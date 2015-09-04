@@ -61,13 +61,13 @@ locust_data = parse_args_to_dict()
 custom_runner.save_multi_mech_data_pickle(locust_data)
 print("Saving process completed for Locust required data...\n")
 
-# print("Creating Multi-Mechanize config file")
-# custom_runner.create_mm_config_file(locust_data)
+print("Creating Multi-Mechanize config file")
+custom_runner.create_mm_config_file(locust_data)
 
-# print("Creating user sessions for testing")
-# users.save_sessions_pickle(locust_config_info["users"])
-# print("user sessions created successfully...\n")
-# print("Starting Multi-mechanize execution for swPerf proyect: \n")
+print("Creating user sessions for testing")
+users.save_sessions_pickle(locust_config_info["users"])
+print("user sessions created successfully...\n")
+print("Starting Multi-mechanize execution for swPerf proyect: \n")
 
 cmd = []
 increase_max_open_files = custom_runner.get_os_max_file_config()
@@ -84,9 +84,8 @@ if locust_config_info["summary_only"]:
     locust_run_cmd += " --summary-only"
 if locust_config_info["print_stats"]:
     locust_run_cmd += "--print-stats"
-
+cmd.append(locust_run_cmd)
 print(cmd)
-print locust_run_cmd
 
 # Run all CLI Commands needed to start multi - mechanize after configure the project
 custom_runner.execute_cli_command(cmd)

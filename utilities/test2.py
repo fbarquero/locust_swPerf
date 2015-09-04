@@ -1,3 +1,5 @@
-from custom_runner import custom_runner
+from requests import Session
 
-custom_runner.execute_cli_command(["source env/bin/activate", "pip freeze -l"])
+session = Session()
+r = session.get("http://localhost:8089")
+print r.content
