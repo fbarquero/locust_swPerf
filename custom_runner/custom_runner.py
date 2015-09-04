@@ -60,7 +60,7 @@ script = {}
         print("Config file path:\n{}".format(locust_config.CONFIG_FILE_PATH))
         with open(locust_config.CONFIG_FILE_PATH, "w") as f:
             # Writting Global Configs
-            global_config_formatted = global_config.format(mm_data["run_time"], mm_data["rampup"],
+            global_config_formatted = global_config.format(mm_data["run_time"], mm_data["ramp_up"],
                                                            mm_data["results_ts_interval"],
                                                            mm_data["progress_bar"], mm_data["console_logging"],
                                                            mm_data["xml_report"])
@@ -106,7 +106,7 @@ def load_swperf_config_data():
     """
     mm_data = load_multi_mech_data()
     locust_config.RUN_TIME = mm_data["run_time"]
-    locust_config.RAMPUP = mm_data["rampup"]
+    locust_config.RAMPUP = mm_data["ram_pup"]
     locust_config.RESULTS_TS_INTERVAL = mm_data["results_ts_interval"],
     locust_config.PROGRESS_BAR = mm_data["progress_bar"]
     locust_config.CONSOLE_LOGGING = mm_data["console_logging"]
