@@ -57,12 +57,14 @@ class UserBehavior(TaskSet):
     #     users_pool.append(user_credentials)
     #     print response.content
 
-    @task
-    def test_example_through_proxy(self):
-        user_credentials = users_pool.pop(0)
-        proxy_request = SowatestRequests(self.client)
-        proxy_request.example_through_proxy()
-        users_pool.append(user_credentials)
+    # @task
+    # def test_example_through_proxy(self):
+    #     user_credentials = users_pool.pop(0)
+    #     proxy_request = SowatestRequests(self.client)
+    #     proxy_request.example_through_proxy()
+    #     users_pool.append(user_credentials)
+
+
     @task
     def test_example_no_proxy(self):
         self.client("/", timeout=10)
