@@ -63,6 +63,9 @@ class UserBehavior(TaskSet):
         proxy_request = SowatestRequests(self.client)
         proxy_request.example_through_proxy()
         users_pool.append(user_credentials)
+    @task
+    def test_example_no_proxy(self):
+        self.client("/", timeout=10)
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
