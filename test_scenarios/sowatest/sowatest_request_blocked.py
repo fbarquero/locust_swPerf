@@ -44,6 +44,7 @@ class UserBehavior(TaskSet):
     @task
     def test_proxy(self):
         user_credentials = users_pool.pop(0)
+        self.client.cookies = user_credentials[1]
         self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
         users_pool.append(user_credentials)
 
