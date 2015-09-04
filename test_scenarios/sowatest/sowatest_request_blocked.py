@@ -41,8 +41,16 @@ class UserBehavior(TaskSet):
     #     finally:
     #         if locust_config.USE_PROXY:
     #             users_pool.append(user_credentials)
+    # @task
+    # def test_proxy(self):
+    #     user_credentials = users_pool.pop(0)
+    #     self.client.cookies = user_credentials[1]
+    #     response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
+    #     users_pool.append(user_credentials)
+    #     print response.content
+    #
     @task
-    def test_proxy(self):
+    def test_example(self):
         user_credentials = users_pool.pop(0)
         self.client.cookies = user_credentials[1]
         response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
@@ -54,7 +62,8 @@ class WebsiteUser(HttpLocust):
     task_set = UserBehavior
     min_wait = 100
     max_wait = 200
-    host = "http://sowatest.com"
+    # host = "http://sowatest.com"
+    host = "http://www.example.com"
     stop_timeout = locust_config.RUN_TIME
 
 
