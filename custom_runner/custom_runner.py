@@ -6,7 +6,7 @@ from sys import platform as _platform
 
 
 from configs.config import GlobalConfigs as GC
-from configs.config import LocustConfigs as MM
+from configs.config import LocustConfigs as locust_config
 
 
 def save_multi_mech_data_pickle(multi_mech_data):
@@ -58,8 +58,8 @@ script = {}
 """
 
     try:
-        print("Config file path:\n{}".format(MM.CONFIG_FILE_PATH))
-        with open(MM.CONFIG_FILE_PATH, "w") as f:
+        print("Config file path:\n{}".format(locust_config.CONFIG_FILE_PATH))
+        with open(locust_config.CONFIG_FILE_PATH, "w") as f:
             # Writting Global Configs
             global_config_formatted = global_config.format(mm_data["run_time"], mm_data["rampup"],
                                                            mm_data["results_ts_interval"],
@@ -106,14 +106,14 @@ def load_swperf_config_data():
     :return:
     """
     mm_data = load_multi_mech_data()
-    MM.RUN_TIME = mm_data["run_time"]
-    MM.RAMPUP = mm_data["rampup"]
-    MM.RESULTS_TS_INTERVAL = mm_data["results_ts_interval"],
-    MM.PROGRESS_BAR = mm_data["progress_bar"]
-    MM.CONSOLE_LOGGING = mm_data["console_logging"]
-    MM.XML_REPORT = mm_data["xml_report"]
-    MM.THREADS = mm_data["threads"]
-    MM.TRANSACTION_FILE = mm_data["test_name"]
+    locust_config.RUN_TIME = mm_data["run_time"]
+    locust_config.RAMPUP = mm_data["rampup"]
+    locust_config.RESULTS_TS_INTERVAL = mm_data["results_ts_interval"],
+    locust_config.PROGRESS_BAR = mm_data["progress_bar"]
+    locust_config.CONSOLE_LOGGING = mm_data["console_logging"]
+    locust_config.XML_REPORT = mm_data["xml_report"]
+    locust_config.THREADS = mm_data["threads"]
+    locust_config.TRANSACTION_FILE = mm_data["test_name"]
     GC.GLOBAL_REQUEST_TIMEOUT = mm_data["request_timeout"]
 
 

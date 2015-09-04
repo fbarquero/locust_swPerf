@@ -1,5 +1,5 @@
-#!/usr/local/bin/python
 __author__ = 'alonsobarquero'
+
 
 import argparse
 
@@ -65,7 +65,7 @@ print("Saving process completed for Locust required data...\n")
 # custom_runner.create_mm_config_file(locust_data)
 
 print("Creating user sessions for testing")
-users.save_sessions_pickle(locust_config_info["threads"])
+users.save_sessions_pickle(locust_config_info["users"])
 print("user sessions created successfully...\n")
 print("Starting Multi-mechanize execution for swPerf proyect: \n")
 

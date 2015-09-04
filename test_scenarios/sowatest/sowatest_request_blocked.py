@@ -4,12 +4,16 @@ from BeautifulSoup import BeautifulSoup
 from configs.config import LocustConfigs as locust_config
 from utilities import sw_user_management as usrs
 from sw_requests.sowatest import SowatestRequests
-
+from custom_runner import custom_runner as c_runner
 
 if locust_config.USE_PROXY:
     print("Loading user sessions ...\n")
     users_pool = usrs.load_sessions_pickle()
     print("\nUsers loaded successfully\n")
+
+print("\nLoading swPerf config information\n")
+c_runner.load_swperf_config_data()
+print("\nswPerf config loaded sucessfully")
 
 
 class UserBehavior(TaskSet):
@@ -36,8 +40,7 @@ class UserBehavior(TaskSet):
         finally:
             if locust_config.USE_PROXY:
                 users_pool.append(user_credentials)
-                # proxy_request.session.close()
-                # self.client.get("/", timeout=10, allow_redirects=False)
+
 
 
 class WebsiteUser(HttpLocust):
@@ -45,7 +48,7 @@ class WebsiteUser(HttpLocust):
     min_wait = 100
     max_wait = 200
     host = "http://sowatest.com"
-    stop_timeout = 6
+    stop_timeout = locust_config.RUN_TIME
 
 
 
