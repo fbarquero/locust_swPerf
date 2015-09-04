@@ -110,3 +110,4 @@ def load_sessions_pickle():
         raise Exception("Users were not loaded successfully...")
     return sessions
 
+save_sessions_pickle(250)
