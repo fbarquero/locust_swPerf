@@ -52,7 +52,7 @@ class ProxyConfigs():
             'session.socialware.com']
 
 
-class MultiMechanizeConfigs():
+class LocustConfigs():
     RUN_TIME = 60
     RESULTS_TS_INTERVAL = 120
     RAMPUP = 600

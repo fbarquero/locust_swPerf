@@ -2,7 +2,7 @@ __author__ = 'alonsobarquero'
 
 import os.path
 
-from configs.config import MultiMechanizeConfigs as MM
+from configs.config import LocustConfigs as MM
 
 
 global_config="""

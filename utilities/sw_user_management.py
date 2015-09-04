@@ -1,8 +1,9 @@
 __author__ = 'mblair'
 
 import pickle
+from requests import Session
 
-from configs.config import MultiMechanizeConfigs as MM
+from configs.config import LocustConfigs as MM
 from configs.config import GlobalConfigs as GC
 from sw_requests.login import Login
 import time
@@ -35,13 +36,13 @@ def get_user_credentials(x):
     :return:
     """
     try:
-        user_login = Login()
+        user_login = Login(None)
         if MM.LOGIN_STYLE is "once":
             user = get_user_name(x)
             r = user_login.sw_valid_login(username=user, password=user, url=GC.SOCIAL_NETWORKING_URLs['direct_sowatest'])
             if r.status_code != 200:
                 raise Exception("Errors found at the moment of create the user {}, Error Code {}".format(user, r.status_code))
-            user = (user, user_login.session.cookies)
+            user = (user, user_login.client.cookies)
         else:
             user = get_user_name(x)
     except Exception, e:
@@ -52,7 +53,7 @@ def get_user_credentials(x):
             print(user[0])
         else:
             print(user)
-        user_login.session.close()
+        # user_login.session.close()
     return user
 
 
@@ -108,3 +109,4 @@ def load_sessions_pickle():
     if not isinstance(sessions, list):
         raise Exception("Users were not loaded successfully...")
     return sessions
+

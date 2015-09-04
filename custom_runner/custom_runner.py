@@ -6,7 +6,7 @@ from sys import platform as _platform
 
 
 from configs.config import GlobalConfigs as GC
-from configs.config import MultiMechanizeConfigs as MM
+from configs.config import LocustConfigs as MM
 
 
 def save_multi_mech_data_pickle(multi_mech_data):

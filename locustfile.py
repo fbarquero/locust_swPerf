@@ -5,7 +5,7 @@ from requests.adapters import HTTPAdapter
 from BeautifulSoup import BeautifulSoup
 
 from sw_requests.sowatest import SowatestRequests
-from configs.config import MultiMechanizeConfigs as MM
+from configs.config import LocustConfigs as MM
 from utilities import sw_user_management as usrs
 
 ##  locust -f locustfile.py --no-web -n 10 -r 10

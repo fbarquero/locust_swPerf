@@ -7,7 +7,8 @@ class UserBehavior(TaskSet):
 
     @task(1)
     def index(self):
-        self.client.get("/", timeout=10)
+        response = self.client.get("/", timeout=10)
+        print response.content
 98
 
 class WebsiteUser(HttpLocust):

@@ -1,23 +1,24 @@
 __author__ = 'alonsobarquero'
 import requests
+from locust import TaskSet
 requests.packages.urllib3.disable_warnings()
 
-from sw_request_core import request as r
+from sw_request_core.request import ProxyRequests
 from configs.config import GlobalConfigs as GC
 
 
 class SowatestRequests:
-    def __init__(self):
-        self.session = None
+
+    def __init__(self, client):
+        self.client = client
 
     def sowatest_through_proxy(self, credentials):
-        self.session = requests.Session()
-        self.session.cookies = credentials[1]
-        response = r.get_with_proxy(self.session, GC.SOCIAL_NETWORKING_URLs['direct_sowatest'])
+        proxy_request = ProxyRequests(self.client)
+        self.client.cookies = credentials[1]
+        response = proxy_request.get_with_proxy("/")
         return response
 
     def sowatest_no_proxy(self):
-        self.session = requests.Session()
-        response = self.session.get(GC.SOCIAL_NETWORKING_URLs["direct_sowatest"], timeout=GC.GLOBAL_REQUEST_TIMEOUT,
+        response = self.client.get("/", timeout=GC.GLOBAL_REQUEST_TIMEOUT,
                                     verify=GC.VERIFY_CERTIFICATE)
         return response

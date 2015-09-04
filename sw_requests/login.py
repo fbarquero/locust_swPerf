@@ -1,18 +1,20 @@
 __author__ = 'alonsobarquero'
-# from lxml import html
+
 from BeautifulSoup import BeautifulSoup
-import requests
-requests.packages.urllib3.disable_warnings()
+from requests import Session, packages
+packages.urllib3.disable_warnings()
 from requests.adapters import HTTPAdapter
 from configs.config import GlobalConfigs as GC, CertificateConfigs as CRT, ProxyConfigs as PC
-from sw_request_core import request as sw_r
+from sw_request_core.request import ProxyRequests
 
 
 class Login:
 
-    def __init__(self):
-        self.session = None
-
+    def __init__(self, client):
+        if client is None:
+            self.client = Session()
+        else:
+            self.client = client
 
     def sw_valid_login(self, username, password, url):
         """
@@ -25,20 +27,20 @@ class Login:
         :return: response object, with the Social Networking Website Login homepage.
         """
         # Creates session
-        self.session = requests.Session()
+
         http_adapter = HTTPAdapter(max_retries=0)
-        self.session.mount('http://', http_adapter)
-        self.session.mount('https://', http_adapter)
+        self.client.mount('http://', http_adapter)
+        self.client.mount('https://', http_adapter)
         # Set Certificate to authenticate in the proxy server and socialware sites
-        self.session.cert = (CRT.CERT_CRT_PATH, CRT.CERT_KEY_PATH)
+        self.client.cert = (CRT.CERT_CRT_PATH, CRT.CERT_KEY_PATH)
         # Accessing the Social Networking Website
-        response = sw_r.get_with_proxy(self.session, url) #s.get(url, allow_redirects=False, headers=GC.HEADERS, proxies=GC.proxies)
+        proxy_request = ProxyRequests(self.client)
+        response = proxy_request.get_with_proxy(url) #s.get(url, allow_redirects=False, headers=GC.HEADERS, proxies=GC.proxies)
         # Loggin in IDP and get the response to redirect to the Social Networking  Website
         response = self.authenticate_in_idp(username, password)
         # Continue the redirect to the Social Networking Website
-        response = sw_r.get_with_proxy(self.session, response.headers['location'])
+        response = proxy_request.get_with_proxy(response.headers['location'])
         return response
-
 
     def authenticate_in_idp(self ,username, password):
         """
@@ -55,9 +57,9 @@ class Login:
                      'submit':'LOGIN'
                      }
         # POST to start the Authentication process at IDP
-        response = self.session.post("https://app.qa1.socialware.com/idp/Authn/UserPassword", form_data, allow_redirects=False, headers=GC.HEADERS, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
+        response = self.client.post("https://app.qa1.socialware.com/idp/Authn/UserPassword", form_data, allow_redirects=False, headers=GC.HEADERS, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
         # Get the SAML2 Token
-        response = self.session.get(response.headers['location'], allow_redirects=False, headers=GC.HEADERS, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
+        response = self.client.get(response.headers['location'], allow_redirects=False, headers=GC.HEADERS, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
         #Parse the HTML Response, obtain the SAML Token and set the payload to send back the SAML Token
         soup = BeautifulSoup(response.text)
         saml_token = soup.find("input", {"name": "SAMLResponse"})
@@ -70,5 +72,5 @@ class Login:
         #     'SAMLResponse': tree.xpath("//input[@name='SAMLResponse']/@value")
         # }
         #POST to send the SAML2 Token and catch up back the flow to Facebook
-        response = self.session.post("https://session.socialware.com/saml/acs", form_data, allow_redirects=False, headers=GC.HEADERS, proxies=PC.PROXIES, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
+        response = self.client.post("https://session.socialware.com/saml/acs", form_data, allow_redirects=False, headers=GC.HEADERS, proxies=PC.PROXIES, timeout=GC.GLOBAL_REQUEST_TIMEOUT, verify=GC.VERIFY_CERTIFICATE)
         return response
