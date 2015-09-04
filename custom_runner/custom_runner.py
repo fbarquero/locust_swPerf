@@ -4,7 +4,6 @@ import subprocess
 from sys import platform as _platform
 
 
-
 from configs.config import GlobalConfigs as GC
 from configs.config import LocustConfigs as locust_config
 

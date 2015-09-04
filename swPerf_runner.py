@@ -71,8 +71,8 @@ print("Saving process completed for Locust required data...\n")
 
 cmd = []
 increase_max_open_files = custom_runner.get_os_max_file_config()
-cmd.append("pwd")
 cmd.append("source env/bin/activate")
+cmd.append("pip freeze -l")
 if len(increase_max_open_files) > 0:
     cmd = cmd + increase_max_open_files
 locust_run_cmd = "locust -f {} -c {} -r {}".format(locust_data["test_name"],
