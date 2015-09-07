@@ -45,9 +45,9 @@ class CertificateConfigs:
 class ProxyConfigs():
     PROXY_PAC_URL = "https://app.qa1.socialware.com/api/pac/3130"
     PROXY_URL = "proxy.qa1.socialware.com"
-    # PROXIES = {'https': "proxy.qa1.socialware.com:3130", 'http': "proxy.qa1.socialware.com:3130"}
-    PROXY_IP = socket.gethostbyname(PROXY_URL)
-    PROXIES = {'https': "{}:3130".format(PROXY_IP), 'http': "{}:3130".format(PROXY_IP)}
+    PROXIES = {'https': "proxy.qa1.socialware.com:3130", 'http': "proxy.qa1.socialware.com:3130"}
+    # PROXY_IP = socket.gethostbyname(PROXY_URL)
+    # PROXIES = {'https': "{}:3130".format(PROXY_IP), 'http': "{}:3130".format(PROXY_IP)}
     URLs = ['twitter.com', 'facebook.com', 'linkedin.com', 'sowatest.com', 'proxy.qa1.socialware.com',
             'session.socialware.com']
 
