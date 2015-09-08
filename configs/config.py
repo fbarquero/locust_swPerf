@@ -21,9 +21,11 @@ class GlobalConfigs:
 
     }
     SESSIONS_FILE_NAME = "sessions.obj"
+    STARTING_INFO_FILE = "master_pid.obj"
     TMP_FOLDER = "tmp"
     TMP_BASE_PATH = "{}/{}".format(os.path.join(os.path.dirname(__file__), '..'), TMP_FOLDER)
     SESSIONS_FILE_PATH = "{}/{}".format(TMP_BASE_PATH, SESSIONS_FILE_NAME)
+    STARTING_INFO_FILE_PATH = "{}/{}".format(TMP_BASE_PATH, STARTING_INFO_FILE)
     MULTI_MECH_DATA_FILE = "multi_mech_data.obj"
     MULTI_MECH_FILE_PATH = "{}/{}".format(TMP_BASE_PATH, MULTI_MECH_DATA_FILE)
     RESULTS_FOLDER = "results"
@@ -53,7 +55,7 @@ class ProxyConfigs():
 
 
 class LocustConfigs():
-    RUN_TIME = 1800
+    RUN_TIME = 60
     RESULTS_TS_INTERVAL = 120
     RAMPUP = 600
     PROGRESS_BAR = "on"
