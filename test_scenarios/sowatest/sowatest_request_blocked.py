@@ -1,4 +1,5 @@
-from locust import HttpLocust, TaskSet, task
+from locust import HttpLocust, TaskSet, task, events
+import sys
 from BeautifulSoup import BeautifulSoup
 from requests.adapters import HTTPAdapter
 
@@ -82,6 +83,8 @@ class WebsiteUser(HttpLocust):
     host = "http://www.example.com"
     # host = "http://sowatest.com"
     stop_timeout = 60
+
+
 
 
 

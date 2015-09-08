@@ -1,5 +1,2 @@
-from requests import Session
-
-session = Session()
-r = session.get("http://localhost:8089")
-print r.content
+import time
+print "Current date & time " + time.strftime("%x") + time.strftime("%X")
