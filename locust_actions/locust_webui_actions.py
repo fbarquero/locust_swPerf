@@ -19,10 +19,11 @@ class LocustioWebActions:
         if not os.path.exists(GC.RESULTS_BASE_PATH):
             os.makedirs(GC.RESULTS_BASE_PATH)
         current_date_time = "{}_{}".format(strftime("%x").replace("/", "."), strftime("%X"))
-        os.makedirs("{}/{}".format(GC.RESULTS_BASE_PATH, current_date_time))
+        latest_result_folder = "{}/{}".format(GC.RESULTS_BASE_PATH, current_date_time)
+        os.makedirs(latest_result_folder)
         form_data = {"locust_count": 200, "hatch_rate": 10}
-        response = self.session.post("http://localhost:8089/swarm", data=form_data)
-        print("Response from start_locust: {}".format(response.content))
+        self.session.post("http://localhost:8089/swarm", data=form_data)
+        return
 
 
     def stop_locust(self):
@@ -36,17 +37,17 @@ class LocustioWebActions:
 
     def get_request_stats_csv(self):
         response = self.session.get("http://localhost:8089/stats/requests/csv")
-        print("request stats csv: {}".format(response.content))
+        return response.content
 
 
     def get_stats_distribution_csv(self):
         response = self.session.get("http://localhost:8089/stats/distribution/csv")
-        print("request stats distribution csv: {}".format(response.content))
+        return response.content
 
 
     def get_exceptions_csv(self):
         response = self.session.get("http://localhost:8089/exceptions/csv")
-        print("request exception csv: {}".format(response.content))
+        return response.content
 
     def get_starting_info(self):
         with open(GC.STARTING_INFO_FILE_PATH, "rb") as f:
@@ -57,6 +58,3 @@ class LocustioWebActions:
         starting_info = self.get_starting_info()
         os.kill(starting_info["pid"], signal.SIGTERM)
 
-# LocustioWebActions().start_locust()
-# LocustioWebActions().get_stats_locust()
-LocustioWebActions().kill_master()
