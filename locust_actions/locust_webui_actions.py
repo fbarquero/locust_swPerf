@@ -7,6 +7,7 @@ import signal
 import pickle
 
 from configs.config import GlobalConfigs as GC
+from configs.config import LocustConfigs as LC
 
 
 class LocustioWebActions:
@@ -21,7 +22,7 @@ class LocustioWebActions:
         current_date_time = "{}_{}".format(strftime("%x").replace("/", "."), strftime("%X"))
         latest_result_folder = "{}/{}".format(GC.RESULTS_BASE_PATH, current_date_time)
         os.makedirs(latest_result_folder)
-        form_data = {"locust_count": 200, "hatch_rate": 10}
+        form_data = {"locust_count": LC.THREADS, "hatch_rate": LC.RAMPUP}
         self.session.post("http://localhost:8089/swarm", data=form_data)
         return latest_result_folder
 
