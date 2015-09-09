@@ -70,7 +70,7 @@ def get_user_pool(users):
     GC.GLOBAL_REQUEST_TIMEOUT = 120
     try:
         start = time.time()
-        pool = mp.Pool(processes=20)
+        pool = mp.Pool(processes=50)
         results = pool.map(get_user_credentials, xrange(1, users + 1))
     except Exception, e:
         print e.message
