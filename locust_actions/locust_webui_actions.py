@@ -23,7 +23,7 @@ class LocustioWebActions:
         os.makedirs(latest_result_folder)
         form_data = {"locust_count": 200, "hatch_rate": 10}
         self.session.post("http://localhost:8089/swarm", data=form_data)
-        return
+        return latest_result_folder
 
 
     def stop_locust(self):

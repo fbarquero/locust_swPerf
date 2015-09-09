@@ -76,10 +76,9 @@ class UserBehavior(TaskSet):
     #     users_pool.append(user_credentials)
 
     #
-    @task
+    @task(3)
     def test_example_no_proxy(self):
         self.client.get("/", timeout=10)
-
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
@@ -91,13 +90,19 @@ class WebsiteUser(HttpLocust):
 
 
 def on_master_start_hatching():
-    info = dict(pid=os.getpid(), start_time=time())
+    info = dict(pid=os.getpid(), start_time=time(), ramp_up=True)
+    with open(GC.STARTING_INFO_FILE_PATH, "wb") as f:
+        pickle.dump(info, f)
+    print info
+
+def on_hatch_complete(user_count):
+    info = dict(pid=os.getpid(), start_time=time(), ramp_up=False)
     with open(GC.STARTING_INFO_FILE_PATH, "wb") as f:
         pickle.dump(info, f)
     print info
 
 events.master_start_hatching += on_master_start_hatching
-# events.hatch_complete += on_master_start_hatching
+events.hatch_complete += on_hatch_complete
 
 
 

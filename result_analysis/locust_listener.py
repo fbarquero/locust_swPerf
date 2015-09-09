@@ -10,10 +10,10 @@ import json
 from configs.config import GlobalConfigs as GC
 from configs.config import LocustConfigs as LC
 from locust_actions.locust_webui_actions import LocustioWebActions
+from result_analysis import ResultAnalysis
 
 
 class ResultGathering:
-
     def __init__(self):
         self.session = Session()
 
@@ -29,41 +29,70 @@ class ResultGathering:
 
     def listening_locust_stats(self):
         locust_web_actions = LocustioWebActions()
+        result_analysis = ResultAnalysis()
         result_folder = locust_web_actions.start_locust()
         locust_starting_info = locust_web_actions.get_starting_info()
-
-        request_stats_csv = "{}/{}".format(result_folder, "request_stats.csv")
-        stats_distribution_csv = "{}/{}".format(result_folder, "stats_distribution.csv")
-        exceptions_csv = "{}/{}".format(result_folder, "exceptions.csv")
-
+        graph_info = dict()
         request_failed = []
         num_requests = []
         median_response_time = []
         average_response_time = []
         max_response_time = []
         request_per_second = []
-        print time() - locust_starting_info["start_time"]
+        ramp_up = True
 
-        while time() - locust_starting_info["start_time"] < (LC.RUN_TIME + 5):
+        while ramp_up or time() - locust_starting_info["start_time"] < (LC.RUN_TIME + 1):
+            sleep(1)
             stats = json.loads(self.get_stats_locust())
             stat = stats["stats"][0]
             request_failed.append(stat["num_failures"])
             num_requests.append(stat["num_requests"])
             request_per_second.append(round(stat["current_rps"], 2))
-            median_response_time.append(round(stat["median_response_time"], 2))
+            median_response_time.append(
+                round(0 if stat["median_response_time"] is None else stat["median_response_time"], 2))
             average_response_time.append(round(stat["avg_response_time"], 2))
             max_response_time.append(round(stat["max_response_time"], 2))
-            sleep(1)
-        with open(request_stats_csv, "w") as f:
-            f.write(locust_web_actions.get_request_stats_csv())
-        with open(stats_distribution_csv, "w") as f:
-            f.write(locust_web_actions.get_stats_distribution_csv())
-        with open(exceptions_csv, "w") as f:
-            f.write(locust_web_actions.get_exceptions_csv())
-        print("requests: {}".format(num_requests))
-        print("request_failed: {}".format(request_failed))
-        print("request per second: {}".format(request_per_second))
+            if ramp_up:
+                locust_starting_info = locust_web_actions.get_starting_info()
+                if not locust_starting_info["ramp_up"]:
+                    print("Ramp up is over")
+                    # Saving ramp up information
+                    graph_info["ramp_up_request_failed"] = result_analysis.compress_chart_dataset(request_failed)
+                    graph_info["ramp_up_num_requests"] = result_analysis.compress_chart_dataset(num_requests)
+                    graph_info["ramp_up_median_response_time"] = result_analysis.compress_chart_dataset(
+                        median_response_time)
+                    graph_info["ramp_up_average_response_time"] = result_analysis.compress_chart_dataset(
+                        average_response_time)
+                    graph_info["ramp_up_max_response_time"] = result_analysis.compress_chart_dataset(max_response_time)
+                    graph_info["ramp_up_request_per_second"] = result_analysis.compress_chart_dataset(
+                        request_per_second)
+                    graph_info["ramp_up_time"] = len(num_requests)
+                    graph_info["ramp_up_x_axis"] = result_analysis.get_chart_x_axis(len(num_requests))
+
+                    # Cleaning ramp up info
+                    request_failed = []
+                    num_requests = []
+                    median_response_time = []
+                    average_response_time = []
+                    max_response_time = []
+                    request_per_second = []
+
+                    ramp_up = locust_starting_info["ramp_up"]
         locust_web_actions.kill_master()
+        print num_requests
+        print request_failed
+        print request_per_second
+        graph_info["request_failed"] = result_analysis.compress_chart_dataset(request_failed)
+        graph_info["num_requests"] = result_analysis.compress_chart_dataset(num_requests)
+        graph_info["median_response_time"] = result_analysis.compress_chart_dataset(median_response_time)
+        graph_info["average_response_time"] = result_analysis.compress_chart_dataset(average_response_time)
+        graph_info["max_response_time"] = result_analysis.compress_chart_dataset(max_response_time)
+        graph_info["request_per_second"] = result_analysis.compress_chart_dataset(request_per_second)
+        graph_info["x_axis"] = result_analysis.get_chart_x_axis(len(num_requests))
+        # print(graph_info)
+        result_analysis.final_report(result_folder, graph_info)
+
+
 
 
 ResultGathering().listening_locust_stats()
