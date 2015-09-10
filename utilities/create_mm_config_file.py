@@ -27,7 +27,7 @@ try:
         f.write(global_config.format(MM.RUN_TIME, MM.RAMPUP, MM.RESULTS_TS_INTERVAL,
                                      MM.PROGRESS_BAR, MM.CONSOLE_LOGGING, MM.XML_REPORT))
         # Setting User-group
-        f.write(user_group.format(MM.THREADS, MM.TRANSACTION_FILE))
+        f.write(user_group.format(MM.USERS, MM.TRANSACTION_FILE))
         print("Config file created successfully")
 
 except:

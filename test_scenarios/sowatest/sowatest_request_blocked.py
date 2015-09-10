@@ -26,32 +26,32 @@ if locust_config.USE_PROXY:
 
 class UserBehavior(TaskSet):
 
-    # @task
-    # def hit_sowatest(self):
-    #     try:
-    #         if locust_config.USE_PROXY:
-    #             user_credentials = users_pool.pop(0)
-    #             http_adapter = HTTPAdapter(max_retries=0)
-    #             self.client.mount('http://', http_adapter)
-    #             self.client.mount('https://', http_adapter)
-    #             proxy_request = SowatestRequests(self.client)
-    #             response = proxy_request.sowatest_through_proxy(user_credentials)
-    #             # soup = BeautifulSoup(response.text)
-    #             # Assert Section
-    #             # assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
-    #             # assert "Access Denied" in str(soup.find("title").text)
-    #             # assert '<div id="blockedBanner">' in response.text
-    #         else:
-    #             print("no proxy")
-    #     except Exception, e:
-    #         # if locust_config.USE_PROXY:
-    #         #     if e.message is 'location':
-    #         #         raise Exception('Possible authentication error against IDP!')
-    #         #     raise
-    #         pass
-    #     finally:
-    #         if locust_config.USE_PROXY:
-    #             users_pool.append(user_credentials)
+    @task
+    def hit_sowatest(self):
+        try:
+            if locust_config.USE_PROXY:
+                user_credentials = users_pool.pop(0)
+                http_adapter = HTTPAdapter(max_retries=0)
+                self.client.mount('http://', http_adapter)
+                self.client.mount('https://', http_adapter)
+                proxy_request = SowatestRequests(self.client)
+                response = proxy_request.sowatest_through_proxy(user_credentials)
+                # soup = BeautifulSoup(response.text)
+                # Assert Section
+                # assert response.status_code is 200, "unexpected response status code {}".format(response.status_code)
+                # assert "Access Denied" in str(soup.find("title").text)
+                # assert '<div id="blockedBanner">' in response.text
+            else:
+                print("no proxy")
+        except Exception, e:
+            # if locust_config.USE_PROXY:
+            #     if e.message is 'location':
+            #         raise Exception('Possible authentication error against IDP!')
+            #     raise
+            pass
+        finally:
+            if locust_config.USE_PROXY:
+                users_pool.append(user_credentials)
     # @task
     # def test_proxy(self):
     #     user_credentials = users_pool.pop(0)
@@ -76,17 +76,17 @@ class UserBehavior(TaskSet):
     #     users_pool.append(user_credentials)
 
     #
-    @task
-    def test_example_no_proxy(self):
-        self.client.get("/", timeout=10)
+    # @task
+    # def test_example_no_proxy(self):
+    #     self.client.get("/", timeout=10)
 
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
     min_wait = 0
     max_wait = 0
-    host = "http://www.example.com"
-    # host = "http://sowatest.com"
+    # host = "http://www.example.com"
+    host = "http://sowatest.com"
     stop_timeout = 1800
 
 

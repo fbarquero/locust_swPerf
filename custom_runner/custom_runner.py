@@ -107,7 +107,7 @@ def load_swperf_config_data():
     mm_data = load_multi_mech_data()
     locust_config.RUN_TIME = mm_data["run_time"]
     locust_config.RAMPUP = mm_data["ramp_up"]
-    locust_config.THREADS = mm_data["users"]
+    locust_config.USERS = mm_data["users"]
     locust_config.TRANSACTION_FILE = mm_data["test_name"]
     GC.GLOBAL_REQUEST_TIMEOUT = mm_data["request_timeout"]
 

@@ -1,2 +1,3 @@
-a = "algo {1} mas que {2} solo {1} texto".format("re", "valor 2")
+a = "asasa {}".format(round((float(10 * 100) / 11199), 2))
+print round(((10 * 100) / 11199), 3)
 print a

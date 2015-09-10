@@ -6,6 +6,7 @@ from time import sleep
 from time import strftime
 from time import time
 import json
+import sys
 
 from configs.config import GlobalConfigs as GC
 from configs.config import LocustConfigs as LC
@@ -78,19 +79,29 @@ class ResultGathering:
                     request_per_second = []
 
                     ramp_up = locust_starting_info["ramp_up"]
+            else:
+                percent = float(time() - locust_starting_info["start_time"]) / LC.RUN_TIME
+                hashes = '#' * int(round(percent * 20))
+                spaces = ' ' * (20 - len(hashes))
+                failure_percentage = round((float((stat["num_failures"] * 100)) / stat["num_requests"]), 2)
+                sys.stdout.write(
+                    "\rPercent: [{0}] {1}%   Total Requests: {2}   Request Failed {3} ({4}%)   "
+                    "Elapsed time: {5})".format(hashes + spaces, int(round(percent * 100)),
+                                                stat["num_requests"], stat["num_failures"],
+                                                failure_percentage,
+                                                round(time() - locust_starting_info["start_time"], 2)))
+                sys.stdout.flush()
         locust_web_actions.kill_master()
         print("Compressing info for graphs")
-        graph_info["request_failed"] = result_analysis.compress_chart_dataset(request_failed)
-        graph_info["num_requests"] = result_analysis.compress_chart_dataset(num_requests)
-        graph_info["median_response_time"] = result_analysis.compress_chart_dataset(median_response_time)
-        graph_info["average_response_time"] = result_analysis.compress_chart_dataset(average_response_time)
-        graph_info["max_response_time"] = result_analysis.compress_chart_dataset(max_response_time)
-        graph_info["request_per_second"] = result_analysis.compress_chart_dataset(request_per_second)
-        graph_info["x_axis"] = result_analysis.get_chart_x_axis(len(num_requests))
+        graph_info["request_failed"] = result_analysis.compress_chart_dataset(request_failed[1:])
+        graph_info["num_requests"] = result_analysis.compress_chart_dataset(num_requests[1:])
+        graph_info["median_response_time"] = result_analysis.compress_chart_dataset(median_response_time[1:])
+        graph_info["average_response_time"] = result_analysis.compress_chart_dataset(average_response_time[1:])
+        graph_info["max_response_time"] = result_analysis.compress_chart_dataset(max_response_time[1:])
+        graph_info["request_per_second"] = result_analysis.compress_chart_dataset(request_per_second[1:])
+        graph_info["x_axis"] = result_analysis.get_chart_x_axis(len(num_requests[1:]))
         print("compression done")
         result_analysis.final_report(result_folder, graph_info)
-
-
 
 
 ResultGathering().listening_locust_stats()
