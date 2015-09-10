@@ -178,9 +178,9 @@ class ResultAnalysis:
         error_details += "</table>"
         print("Creating HTML Report")
         with open("{}/result_report.html".format(path), "w") as f:
-            f.write(html_template.format(graph_info["num_requests"],
-                                         graph_info["request_failed"],
-                                         graph_info["num_requests"] + graph_info["request_failed"],
+            f.write(html_template.format(graph_info["num_requests"][-1],
+                                         graph_info["request_failed"][-1],
+                                         graph_info["num_requests"][-1] + graph_info["request_failed"][-1],
                                          error_details,
                                          graph_info["x_axis"],
                                          graph_info["num_requests"],

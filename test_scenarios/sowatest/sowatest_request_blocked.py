@@ -25,7 +25,7 @@ if locust_config.USE_PROXY:
 
 
 class UserBehavior(TaskSet):
-    #
+
     @task
     def hit_sowatest(self):
         try:
@@ -52,42 +52,14 @@ class UserBehavior(TaskSet):
         finally:
             if locust_config.USE_PROXY:
                 users_pool.append(user_credentials)
-    # @task
-    # def test_proxy(self):
-    #     user_credentials = users_pool.pop(0)
-    #     self.client.cookies = user_credentials[1]
-    #     response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
-    #     users_pool.append(user_credentials)
-    #     print response.content
-    #
-    # @task
-    # def test_example(self):
-    #     user_credentials = users_pool.pop(0)
-    #     self.client.cookies = user_credentials[1]
-    #     response = self.client.get("/", proxies=proxy_config.PROXIES, verify=False)
-    #     users_pool.append(user_credentials)
-    #     print response.content
-
-    # @task
-    # def test_example_through_proxy(self):
-    #     user_credentials = users_pool.pop(0)
-    #     proxy_request = SowatestRequests(self.client)
-    #     proxy_request.example_through_proxy()
-    #     users_pool.append(user_credentials)
-
-    #
-    # @task
-    # def test_example_no_proxy(self):
-    #     self.client.get("/", timeout=10)
 
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
     min_wait = 0
     max_wait = 0
-    # host = "http://www.example.com"
     host = "http://sowatest.com"
-    stop_timeout = 600
+    stop_timeout = locust_config.RUN_TIME
 
 
 def on_master_start_hatching():
