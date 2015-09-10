@@ -55,7 +55,7 @@ class ProxyConfigs():
 
 
 class LocustConfigs():
-    RUN_TIME = 60
+    RUN_TIME = 1800
     RESULTS_TS_INTERVAL = 120
     RAMPUP = 10
     PROGRESS_BAR = "on"

@@ -79,9 +79,7 @@ class ResultGathering:
 
                     ramp_up = locust_starting_info["ramp_up"]
         locust_web_actions.kill_master()
-        print num_requests
-        print request_failed
-        print request_per_second
+        print("Compressing info for graphs")
         graph_info["request_failed"] = result_analysis.compress_chart_dataset(request_failed)
         graph_info["num_requests"] = result_analysis.compress_chart_dataset(num_requests)
         graph_info["median_response_time"] = result_analysis.compress_chart_dataset(median_response_time)
@@ -89,7 +87,7 @@ class ResultGathering:
         graph_info["max_response_time"] = result_analysis.compress_chart_dataset(max_response_time)
         graph_info["request_per_second"] = result_analysis.compress_chart_dataset(request_per_second)
         graph_info["x_axis"] = result_analysis.get_chart_x_axis(len(num_requests))
-        # print(graph_info)
+        print("compression done")
         result_analysis.final_report(result_folder, graph_info)
 
 

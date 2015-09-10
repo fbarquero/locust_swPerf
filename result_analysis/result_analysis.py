@@ -164,6 +164,7 @@ class ResultAnalysis:
 </body>
 </html>
 """
+        print("Creating HTML Report")
         with open("{}/final_report.html".format(path), "w") as f:
             f.write(html_template.format(graph_info["num_requests"][-1],
                                          graph_info["request_failed"][-1],
@@ -177,11 +178,20 @@ class ResultAnalysis:
                                          graph_info["x_axis"],
                                          graph_info["request_per_second"]
                                          ))
+        print("HTML Report created successfully\n")
 
+        print("Creating graph info file")
         with open("{}/graph_info.txt".format(path), "w") as f:
             f.write(json.dumps(graph_info))
+        print("graph info file created successfully\n")
+
         vendor_folder = "{}/vendor".format(path)
         os.makedirs(vendor_folder)
-        shutil.copyfile("result_report_mockup/Chart.js", "{}/Chart.js".format(vendor_folder))
 
+        print("Copying Chart.js file into vendor folder")
+        with open("result_report_mockup/Chart.js", "r") as f:
+            chart_js = f.readlines()
+        with open("{}/Chart.js".format(vendor_folder), "w") as f:
+            f.writelines(chart_js)
+        print("Chart.js file copied as expected.")
 
