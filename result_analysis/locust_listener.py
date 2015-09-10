@@ -83,7 +83,10 @@ class ResultGathering:
                 percent = float(time() - locust_starting_info["start_time"]) / LC.RUN_TIME
                 hashes = '#' * int(round(percent * 20))
                 spaces = ' ' * (20 - len(hashes))
-                failure_percentage = round((float((stat["num_failures"] * 100)) / stat["num_requests"]), 2)
+                try:
+                    failure_percentage = round((float((stat["num_failures"] * 100)) / stat["num_requests"]), 2)
+                except:
+                    failure_percentage = 0
                 sys.stdout.write(
                     "\rPercent: [{0}] {1}%   Total Requests: {2}   Request Failed {3} ({4}%)   "
                     "Elapsed time: {5})".format(hashes + spaces, int(round(percent * 100)),
