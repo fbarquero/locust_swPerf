@@ -84,15 +84,17 @@ class ResultGathering:
                 hashes = '#' * int(round(percent * 20))
                 spaces = ' ' * (20 - len(hashes))
                 try:
-                    failure_percentage = round((float((stat["num_failures"] * 100)) / stat["num_requests"]), 2)
-                except:
+                    failure_percentage = round(
+                        float((stat["num_failures"] * 100)) / (stat["num_requests"] + stat["num_requests"]), 2)
+                except Exception, e:
                     failure_percentage = 0
                 sys.stdout.write(
-                    "\rPercent: [{0}] {1}%   Total Requests: {2}   Request Failed {3} ({4}%)   "
-                    "Elapsed time: {5})".format(hashes + spaces, int(round(percent * 100)),
-                                                stat["num_requests"], stat["num_failures"],
-                                                failure_percentage,
-                                                round(time() - locust_starting_info["start_time"], 2)))
+                    "\rPercent: [{0}] {1}% Elapsed time: {5} Requests Succeded: {2}  Request Failed {3} ({4}%) "
+                    "Total Requests: {6}".format(hashes + spaces, int(round(percent * 100)),
+                                                 stat["num_requests"], stat["num_failures"],
+                                                 failure_percentage,
+                                                 round(time() - locust_starting_info["start_time"], 2),
+                                                 stat["num_requests"] + stat["num_failures"]))
                 sys.stdout.flush()
         locust_web_actions.kill_master()
         print("\nCompressing info for graphs")
@@ -105,7 +107,7 @@ class ResultGathering:
         graph_info["x_axis"] = result_analysis.get_chart_x_axis(len(num_requests))
         graph_info["errors"] = stats["errors"]
         print("compression done")
-        result_analysis.final_report(result_folder, graph_info)
+        result_analysis.result_report(result_folder, graph_info)
 
 
 ResultGathering().listening_locust_stats()

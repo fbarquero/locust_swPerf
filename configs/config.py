@@ -3,7 +3,6 @@ import os
 import socket
 
 
-
 class GlobalConfigs:
     GROUPS_OF = 10
     VERIFY_CERTIFICATE = False
@@ -24,6 +23,8 @@ class GlobalConfigs:
     STARTING_INFO_FILE = "master_pid.obj"
     TMP_FOLDER = "tmp"
     TMP_BASE_PATH = "{}/{}".format(os.path.join(os.path.dirname(__file__), '..'), TMP_FOLDER)
+    CHART_JS_PATH = "{}/{}".format(os.path.join(os.path.dirname(__file__), '..'),
+                                   "result_analysis/result_report_mockup")
     SESSIONS_FILE_PATH = "{}/{}".format(TMP_BASE_PATH, SESSIONS_FILE_NAME)
     STARTING_INFO_FILE_PATH = "{}/{}".format(TMP_BASE_PATH, STARTING_INFO_FILE)
     MULTI_MECH_DATA_FILE = "multi_mech_data.obj"
@@ -55,8 +56,8 @@ class ProxyConfigs():
 
 
 class LocustConfigs():
-    RUN_TIME = 1800
-    RESULTS_TS_INTERVAL = 120
+    RUN_TIME = 600
+    RESULTS_TS_INTERVAL = 100
     RAMPUP = 650
     PROGRESS_BAR = "on"
     CONSOLE_LOGGING = "off"

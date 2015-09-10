@@ -4,6 +4,7 @@ import shutil
 import json
 
 from configs.config import LocustConfigs as LC
+from configs.config import GlobalConfigs as GC
 
 
 class ResultAnalysis:
@@ -23,7 +24,7 @@ class ResultAnalysis:
             legend.append(legend_split[x][-1] + 1)
         return legend
 
-    def final_report(self, path, graph_info):
+    def result_report(self, path, graph_info):
         html_template = """
 <!doctype html>
 <html>
@@ -35,8 +36,9 @@ class ResultAnalysis:
 <div style="width:30%">
     <div>
         <h2>Execution Summary</h2>
-        Total requests: {}
+        Total succeeded: {}
         Total failures: {}
+        Total requests: {}
     </div>
 </div>
 <div style="width:100%">
@@ -175,9 +177,10 @@ class ResultAnalysis:
             error_details += "<tr><td>{0}</td><td>{1}</td></tr>\n".format(error["occurences"], error["error"])
         error_details += "</table>"
         print("Creating HTML Report")
-        with open("{}/final_report.html".format(path), "w") as f:
-            f.write(html_template.format(graph_info["num_requests"][-1],
-                                         graph_info["request_failed"][-1],
+        with open("{}/result_report.html".format(path), "w") as f:
+            f.write(html_template.format(graph_info["num_requests"],
+                                         graph_info["request_failed"],
+                                         graph_info["num_requests"] + graph_info["request_failed"],
                                          error_details,
                                          graph_info["x_axis"],
                                          graph_info["num_requests"],
@@ -200,7 +203,7 @@ class ResultAnalysis:
         os.makedirs(vendor_folder)
 
         print("Copying Chart.js file into vendor folder")
-        with open("result_report_mockup/Chart.js", "r") as f:
+        with open("{}/Chart.js".format(GC.CHART_JS_PATH), "r") as f:
             chart_js = f.readlines()
         with open("{}/Chart.js".format(vendor_folder), "w") as f:
             f.writelines(chart_js)
