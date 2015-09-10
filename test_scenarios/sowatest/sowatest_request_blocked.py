@@ -87,7 +87,7 @@ class WebsiteUser(HttpLocust):
     max_wait = 0
     # host = "http://www.example.com"
     host = "http://sowatest.com"
-    stop_timeout = 1800
+    stop_timeout = 1500
 
 
 def on_master_start_hatching():
