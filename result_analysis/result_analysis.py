@@ -39,6 +39,12 @@ class ResultAnalysis:
         Total failures: {}
     </div>
 </div>
+<div style="width:100%">
+    <div>
+        <h2>Error Details</h2>
+        {}
+    </div>
+</div>
 <div style="width:30%">
     <div>
         <h2>Request / Errors Graph</h2>
@@ -164,10 +170,15 @@ class ResultAnalysis:
 </body>
 </html>
 """
+        error_details = "<table>\n<tr><td>Occurrences</td><td>Description</td></tr>\n"
+        for error in graph_info["errors"]:
+            error_details += "<tr><td>{0}</td><td>{1}</td></tr>\n".format(error["occurences"], error["error"])
+        error_details += "</table>"
         print("Creating HTML Report")
         with open("{}/final_report.html".format(path), "w") as f:
             f.write(html_template.format(graph_info["num_requests"][-1],
                                          graph_info["request_failed"][-1],
+                                         error_details,
                                          graph_info["x_axis"],
                                          graph_info["num_requests"],
                                          graph_info["request_failed"],
@@ -176,7 +187,7 @@ class ResultAnalysis:
                                          graph_info["max_response_time"],
                                          graph_info["average_response_time"],
                                          graph_info["x_axis"],
-                                         graph_info["request_per_second"]
+                                         graph_info["request_per_second"],
                                          ))
         print("HTML Report created successfully\n")
 

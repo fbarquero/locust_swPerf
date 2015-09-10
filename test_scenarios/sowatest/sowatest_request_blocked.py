@@ -25,7 +25,7 @@ if locust_config.USE_PROXY:
 
 
 class UserBehavior(TaskSet):
-
+    #
     @task
     def hit_sowatest(self):
         try:
@@ -87,7 +87,7 @@ class WebsiteUser(HttpLocust):
     max_wait = 0
     # host = "http://www.example.com"
     host = "http://sowatest.com"
-    stop_timeout = 1500
+    stop_timeout = 1800
 
 
 def on_master_start_hatching():
