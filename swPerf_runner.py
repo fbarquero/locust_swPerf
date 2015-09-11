@@ -14,6 +14,7 @@ required.add_argument('-f', type=str, nargs=1, required=True, help='Locust file 
 required.add_argument('-t', type=int, nargs=1, required=True, help='Time for the Performance/Load tests to '
                                                                    'run in seconds')
 required.add_argument('-r', type=int, nargs=1, required=True, help='How many users you want to ramp-up per second')
+required.add_argument('-tsin', type=int, nargs=1, required=True, help='Time series interval for Charts')
 
 required.add_argument("-l", choices=["once", "all", "none"], nargs=1, required=True, help="Login style required for the"
                                                                                           " test")
@@ -25,7 +26,7 @@ optional.add_argument("--summary-only", help="Displays only the summary after th
 optional.add_argument("--request-timeout", default=[5], type=int, nargs=1, help="Global request timeout for all the "
                                                                               "transactions executed in the tests "
                                                                               "(default is 5 seconds)")
-optional.add_argument("--no-web", help="disable web view for Locust",
+optional.add_argument("--create-user-sessions", help="create user sessions for the concurrent users that will be swarmed",
                       action="store_true")
 # Parse arguments
 args = parser.parse_args()
@@ -45,6 +46,7 @@ def parse_args_to_dict():
     locust_config_info["summary_only"] = args.summary_only
     locust_config_info["users"] = args.u[0]
     locust_config_info["test_name"] = args.f[0]
+    locust_config_info["tsin"] = args.tsin[0]
     if args.l is "once":
         locust_config_info["login_style"] = "once"
     elif args.l is "all":
@@ -61,31 +63,29 @@ locust_data = parse_args_to_dict()
 custom_runner.save_multi_mech_data_pickle(locust_data)
 print("Saving process completed for Locust required data...\n")
 
-print("Creating Multi-Mechanize config file")
-custom_runner.create_mm_config_file(locust_data)
-
-print("Creating user sessions for testing")
-users.save_sessions_pickle(locust_config_info["users"])
-print("user sessions created successfully...\n")
-print("Starting Multi-mechanize execution for swPerf proyect: \n")
-
-cmd = []
-increase_max_open_files = custom_runner.get_os_max_file_config()
-cmd.append("source env/bin/activate")
-cmd.append("pip freeze -l")
-if len(increase_max_open_files) > 0:
-    cmd = cmd + increase_max_open_files
-locust_run_cmd = "locust -f {} -c {} -r {}".format(locust_data["test_name"],
-                                                   locust_data["users"],
-                                                   locust_data["ramp_up"])
-if locust_config_info["no_web"]:
-    locust_run_cmd += " --no-web"
-if locust_config_info["summary_only"]:
-    locust_run_cmd += " --summary-only"
-if locust_config_info["print_stats"]:
-    locust_run_cmd += " --print-stats"
-cmd.append(locust_run_cmd)
-print(cmd)
+if args.create_user_sessions:
+    print("Creating user sessions for testing")
+    users.save_sessions_pickle(locust_config_info["users"])
+    print("user sessions created successfully...\n")
+# print("Starting Multi-mechanize execution for swPerf proyect: \n")
+#
+# cmd = []
+# increase_max_open_files = custom_runner.get_os_max_file_config()
+# cmd.append("source env/bin/activate")
+# cmd.append("pip freeze -l")
+# if len(increase_max_open_files) > 0:
+#     cmd = cmd + increase_max_open_files
+# locust_run_cmd = "locust -f {} -c {} -r {}".format(locust_data["test_name"],
+#                                                    locust_data["users"],
+#                                                    locust_data["ramp_up"])
+# if locust_config_info["no_web"]:
+#     locust_run_cmd += " --no-web"
+# if locust_config_info["summary_only"]:
+#     locust_run_cmd += " --summary-only"
+# if locust_config_info["print_stats"]:
+#     locust_run_cmd += " --print-stats"
+# cmd.append(locust_run_cmd)
+# print(cmd)
 
 # Run all CLI Commands needed to start multi - mechanize after configure the project
-custom_runner.execute_cli_command(cmd)
+# custom_runner.execute_cli_command(cmd)
