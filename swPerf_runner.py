@@ -76,5 +76,3 @@ print("Login style: {}".format(locust_config_info["login_style"]))
 print("Locust file to use: {}".format(locust_config_info["test_name"]))
 print("Create user sessions: {}".format(args.create_user_sessions))
 
-ResultGathering().listening_locust_stats()
-

@@ -108,3 +108,6 @@ class ResultGathering:
         graph_info["errors"] = stats["errors"]
         print("compression done")
         result_analysis.result_report(result_folder, graph_info)
+
+
+ResultGathering().listening_locust_stats()
