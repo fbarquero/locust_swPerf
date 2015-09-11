@@ -4,7 +4,6 @@ __author__ = 'alonsobarquero'
 import argparse
 from custom_runner import custom_runner
 from utilities import sw_user_management as users
-from result_analysis.locust_listener import ResultGathering
 
 parser = argparse.ArgumentParser(description='Executes Socialware performance project.')
 required = parser.add_argument_group("Required arguments:")
