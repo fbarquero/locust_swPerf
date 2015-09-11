@@ -108,8 +108,10 @@ def load_swperf_config_data():
     locust_config.RUN_TIME = mm_data["run_time"]
     locust_config.RAMPUP = mm_data["ramp_up"]
     locust_config.USERS = mm_data["users"]
-    locust_config.TRANSACTION_FILE = mm_data["test_name"]
+    locust_config.LOCUST_FILE = mm_data["test_name"]
     GC.GLOBAL_REQUEST_TIMEOUT = mm_data["request_timeout"]
+    locust_config.RESULTS_TS_INTERVAL = mm_data["tsin"]
+    locust_config.LOCUST_FILE = mm_data["test_name"]
 
 
 def get_os_platform():

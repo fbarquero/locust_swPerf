@@ -41,12 +41,6 @@ class ResultAnalysis:
         Total requests: {}
     </div>
 </div>
-<div style="width:100%">
-    <div>
-        <h2>Error Details</h2>
-        {}
-    </div>
-</div>
 <div style="width:30%">
     <div>
         <h2>Request / Errors Graph</h2>
@@ -65,7 +59,12 @@ class ResultAnalysis:
         <canvas id="throughput_rps" height="450" width="600"></canvas>
     </div>
 </div>
-
+<div style="width:100%">
+    <div>
+        <h2>Error Details</h2>
+        {}
+    </div>
+</div>
 <script>
         var lineChartDataRequestError = {{
             labels : {},
@@ -181,7 +180,6 @@ class ResultAnalysis:
             f.write(html_template.format(graph_info["num_requests"][-1],
                                          graph_info["request_failed"][-1],
                                          graph_info["num_requests"][-1] + graph_info["request_failed"][-1],
-                                         error_details,
                                          graph_info["x_axis"],
                                          graph_info["num_requests"],
                                          graph_info["request_failed"],
@@ -191,6 +189,7 @@ class ResultAnalysis:
                                          graph_info["average_response_time"],
                                          graph_info["x_axis"],
                                          graph_info["request_per_second"],
+                                         error_details
                                          ))
         print("HTML Report created successfully\n")
 

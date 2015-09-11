@@ -2,9 +2,9 @@ __author__ = 'alonsobarquero'
 
 
 import argparse
-
 from custom_runner import custom_runner
 from utilities import sw_user_management as users
+from result_analysis.locust_listener import ResultGathering
 
 parser = argparse.ArgumentParser(description='Executes Socialware performance project.')
 required = parser.add_argument_group("Required arguments:")
@@ -47,14 +47,9 @@ def parse_args_to_dict():
     locust_config_info["users"] = args.u[0]
     locust_config_info["test_name"] = args.f[0]
     locust_config_info["tsin"] = args.tsin[0]
-    if args.l is "once":
-        locust_config_info["login_style"] = "once"
-    elif args.l is "all":
-        locust_config_info["login_style"] = "all"
-    elif args.l is "none":
-        locust_config_info["login_style"] = "none"
+    print "login style: {} l[0]: {}".format(args.l, args.l[0])
+    locust_config_info["login_style"] = args.l[0]
     locust_config_info["request_timeout"] = args.request_timeout[0]
-    locust_config_info["no_web"] = args.no_web
     return locust_config_info
 
 
@@ -67,25 +62,19 @@ if args.create_user_sessions:
     print("Creating user sessions for testing")
     users.save_sessions_pickle(locust_config_info["users"])
     print("user sessions created successfully...\n")
-# print("Starting Multi-mechanize execution for swPerf proyect: \n")
-#
-# cmd = []
-# increase_max_open_files = custom_runner.get_os_max_file_config()
-# cmd.append("source env/bin/activate")
-# cmd.append("pip freeze -l")
-# if len(increase_max_open_files) > 0:
-#     cmd = cmd + increase_max_open_files
-# locust_run_cmd = "locust -f {} -c {} -r {}".format(locust_data["test_name"],
-#                                                    locust_data["users"],
-#                                                    locust_data["ramp_up"])
-# if locust_config_info["no_web"]:
-#     locust_run_cmd += " --no-web"
-# if locust_config_info["summary_only"]:
-#     locust_run_cmd += " --summary-only"
-# if locust_config_info["print_stats"]:
-#     locust_run_cmd += " --print-stats"
-# cmd.append(locust_run_cmd)
-# print(cmd)
 
-# Run all CLI Commands needed to start multi - mechanize after configure the project
-# custom_runner.execute_cli_command(cmd)
+print("\nLoading swPerf config information\n")
+custom_runner.load_swperf_config_data()
+print("\nswPerf config loaded sucessfully")
+
+print("Test Summary: ")
+print("Amount of concurrent Users: {}".format(locust_config_info["users"]))
+print("Users Ramp-up per second: {}".format(locust_config_info["ramp_up"]))
+print("Run time: {}".format(locust_config_info["run_time"]))
+print("Results Time Series Interval: {}".format(locust_config_info["tsin"]))
+print("Login style: {}".format(locust_config_info["login_style"]))
+print("Locust file to use: {}".format(locust_config_info["test_name"]))
+print("Create user sessions: {}".format(args.create_user_sessions))
+
+ResultGathering().listening_locust_stats()
+

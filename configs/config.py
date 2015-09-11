@@ -64,6 +64,6 @@ class LocustConfigs():
     XML_REPORT = "on"
     LOGIN_STYLE = "once"
     USERS = 650
-    TRANSACTION_FILE = "hit_sowatest_login_once.py"
+    LOCUST_FILE = "hit_sowatest_login_once.py"
     USE_PROXY = True
     CONFIG_FILE_PATH = "{}/config.cfg".format(os.path.join(os.path.dirname(__file__), '..'))

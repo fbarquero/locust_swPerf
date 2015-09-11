@@ -19,9 +19,9 @@ if locust_config.USE_PROXY:
     users_pool = usrs.load_sessions_pickle()
     print("\nUsers loaded successfully\n")
 
-# print("\nLoading swPerf config information\n")
-# c_runner.load_swperf_config_data()
-# print("\nswPerf config loaded sucessfully")
+print("\nLoading swPerf config information\n")
+c_runner.load_swperf_config_data()
+print("\nswPerf config loaded sucessfully")
 
 
 class UserBehavior(TaskSet):
